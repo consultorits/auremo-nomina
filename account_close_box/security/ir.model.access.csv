@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_close_box_account_close_box,account_close_box.account_close_box,model_account_close_box,,1,1,1,1
+access_account_close_box_money_user,account_close_box_money user,model_account_close_box_money,,1,1,1,1
+access_account_close_box_bill_user,account_close_box_bill user,model_account_close_box_bill,,1,1,1,1
+access_account_close_box_journal_user,account_close_box_journal user,model_account_close_box_journal,,1,1,1,1

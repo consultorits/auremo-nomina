@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+   <data>
+
+     <record id="paperformat_account_close_box" model="report.paperformat">
+       <field name="name">A4 account close boxprint custom</field>
+       <field name="default" eval="True" />
+       <field name="format">A4</field>
+       <field name="orientation">Portrait</field>
+       <field name="margin_top">20</field>
+       <field name="margin_bottom">13</field>
+       <field name="margin_left">8</field>
+       <field name="margin_right">8</field>
+       <field name="header_line" eval="False" />
+       <field name="header_spacing">15</field>
+       <field name="dpi">90</field>
+     </record>
+
+
+      <record id="account_close_box_report" model="ir.actions.report">
+         <field name="name">Cierre de caja</field>
+         <field name="model">account.close.box</field>
+         <field name="report_type">qweb-pdf</field>
+         <field name="report_name">account_close_box.account_close_box_print</field>
+         <field name="report_file">account_close_box.account_close_box_print</field>
+         <field name="print_report_name">('Cierre de caja - %s' % (object.name))</field>
+         <field name="binding_model_id" ref="account_close_box.model_account_close_box"/>
+         <field name="binding_type">report</field>
+         <field name="paperformat_id" ref='account_close_box.paperformat_account_close_box'/>
+      </record>
+
+      <template id="account_close_box_print">
+         <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+               <t t-call="web.external_layout">
+                  <div class="page"  >
+                     <t t-if="o.state=='done'">
+                        <div class="row" style="font-size:22px">
+                           <div class="col-12 text-center">
+                              <t> <strong>CIERRE DE CAJA </strong>  </t>
+                           </div>
+                        </div>
+                        <div class="row mt-3"  >
+                           <div class="col-6 ">
+                              <t> <strong>Arqueo No.: </strong><span t-field="o.name"/> </t>
+                           </div>
+                           <div class="col-6  ">
+                              <t> <strong>Fecha: </strong><span t-field="o.date"/> </t>
+                           </div>
+                        </div>
+                        <div class="row  "  >
+                           <div class="col-6 ">
+                              <t> <strong>Cajero: </strong><span t-field="o.cashier_id.name"/> </t>
+                           </div>
+                           <div class="col-6  ">
+                              <t> <strong>Saldo Inicial: </strong><span t-field="o.initial_amount"/> </t>
+                           </div>
+                        </div>
+                        <div class="row  "  >
+                           <div class="col-6 ">
+                              <t> <strong>Caja: </strong><span t-field="o.cashier"/> </t>
+                           </div>
+                           <div class="col-6  ">
+                           </div>
+                        </div>
+
+                        <div class="row mt-3"  >
+                           <div class="col-6 ">
+                              <t> <strong>Monedas : </strong>  </t>
+                              <table class="table table-sm">
+                                 <thead>
+                                    <tr>
+                                       <th>Denominacion</th>
+                                       <th>Cantidad Contada</th>
+                                       <th>Total</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr t-foreach="o.money_ids" t-as="money">
+                                       <td> <span t-field="money.coin_value" /></td>
+                                       <td> <span t-field="money.number" /></td>
+                                       <td> <span t-field="money.subtotal" /></td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                           <div class="col-6  ">
+                              <t> <strong>Billetes : </strong>  </t>
+                              <table class="table table-sm">
+                                 <thead>
+                                    <tr>
+                                       <th>Denominacion</th>
+                                       <th>Cantidad Contada</th>
+                                       <th>Total</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr t-foreach="o.billete_ids" t-as="billete">
+                                       <td> <span t-field="billete.coin_value" /></td>
+                                       <td> <span t-field="billete.number" /></td>
+                                       <td> <span t-field="billete.subtotal" /></td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+
+                        <div class="row mt-3"  >
+                           <div class="col-7 ">
+                              <t> <strong>Total en Efectivo: </strong><span t-field="o.total_efectivo"/> </t>
+                           </div>
+                           <div class="col-3 text-right ">
+                              <t> <strong>Monto cobrado: </strong> </t>
+                           </div>
+                           <div class="col-2 text-right ">
+                              <t>  <span t-field="o.total_cobrado"/> </t>
+                           </div>
+                        </div>
+                        <div class="row"  >
+                           <div class="col-7 ">
+                           </div>
+                           <div class="col-3 text-right ">
+                              <t> <strong>Valor en Sistema: </strong> </t>
+                           </div>
+                           <div class="col-2 text-right ">
+                              <t> <span t-field="o.amount_payment"/> </t>
+                           </div>
+                        </div>
+                        <div class="row"  >
+                           <div class="col-7 ">
+                           </div>
+                           <div class="col-3 text-right ">
+                              <t> <strong>Diferencia: </strong> </t>
+                           </div>
+                           <div class="col-2 text-right " style="border-top: 1px solid black;">
+                              <t> <span t-field="o.amount_payment_diff"/> </t>
+                           </div>
+                        </div>
+
+                        <div class="row mt-3 "  >
+                           <div class="col-12 ">
+                              <t> <strong>Diarios : </strong>  </t>
+                              <table class="table table-sm table-striped">
+                                 <thead>
+                                    <tr>
+                                       <th  class="text-center" style="width:40%">Detalle</th>
+                                       <th class="text-center">Monto recibido</th>
+                                       <th class="text-center">Monto en sistema</th>
+                                       <th class="text-center">Diferencia</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <t t-set="total_recibido" t-value="0"/>
+                                    <t t-set="total_sistema" t-value="0"/>
+                                    <t t-set="total_diferencia" t-value="0"/>
+                                    <tr t-foreach="o.journal_payment_ids" t-as="line">
+                                       <td > <span t-field="line.journal_id.name" /></td>
+                                       <td class="text-right"> <span t-field="line.amount_cobrado" /></td>
+                                       <td class="text-right"> <span t-field="line.amount_payment" /></td>
+                                       <td class="text-right"> <span t-field="line.diferencia" /></td>
+                                       <t t-set="total_recibido" t-value="total_recibido + line.amount_cobrado"/>
+                                       <t t-set="total_sistema" t-value="total_sistema + line.amount_payment"/>
+                                       <t t-set="total_diferencia" t-value="total_diferencia + line.diferencia"/>
+                                    </tr>
+                                 </tbody>
+                                 <tr>
+                                    <td class="text-right"> <strong >Total</strong></td>
+                                    <td class="text-right"> <span t-esc="total_recibido" t-options="{'widget': 'monetary', 'display_currency':  o.currency_id }"/></td>
+                                    <td class="text-right"> <span t-esc="total_sistema" t-options="{'widget': 'monetary', 'display_currency':  o.currency_id }"/></td>
+                                    <td class="text-right"> <span t-esc="total_diferencia" t-options="{'widget': 'monetary', 'display_currency':  o.currency_id}"/></td>
+                                 </tr>
+                              </table>
+                           </div>
+
+                        </div>
+
+                        <div class="row mt-3 "  >
+                           <div class="col-2 ">
+                              <t> <strong>Observaciones: </strong> </t>
+                           </div>
+                           <div class="col-10">
+                              <span t-field="o.note"/>
+                           </div>
+                        </div>
+                     </t>
+                     <t t-else="">
+                        <div class="row" style="font-size:22px">
+                           <div class="col-12 text-center">
+                              <t> <strong>PARA IMPRIMIR EL CONTENIDO DEBE VALIDAR LA CAJA</strong>  </t>
+                           </div>
+                        </div>
+                     </t>
+                  </div>
+               </t>
+            </t>
+         </t>
+      </template>
+
+   </data>
+</odoo>

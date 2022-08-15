@@ -1,0 +1,113 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record id="account_close_box_view_form" model="ir.ui.view">
+        <field name="name">account_close_box_view_form</field>
+        <field name="model">account.close.box</field>
+        <field name="arch" type="xml">
+            <form string="_form">
+                <header>
+                   <button name="action_done" attrs="{'invisible': [('state', 'in', ['cancel','done'])]}" string="Validar" type="object" class="oe_highlight" />
+                   <button name="action_cancel" attrs="{'invisible': [('state', 'in', ['cancel',])]}" string="Anular" type="object" confirm="Esta seguro de anular esta operacion?" />
+                   <button name="action_open" attrs="{'invisible': [('state', 'in', ['new','done' ])]}" string="Reabrir" type="object"  groups="account_close_box.group_open_account_close_box" />
+                   <field name="state" widget="statusbar" statusbar_visible="new,done,cancel"/>
+                </header>
+                <sheet>
+                     <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                           <field name="cashier" attrs="{'readonly': [('state', '!=', 'new')]}"/>
+                           <field name="initial_amount" attrs="{'readonly': [('state', '!=', 'new')]}"/>
+                           <field name="money_ids" attrs="{'readonly': [('state', '!=', 'new')]}">
+                              <tree editable="bottom">
+                                 <field name="coin_value" required="1"/>
+                                 <field name="number"/>
+                                 <field name="subtotal" sum="Total"/>
+                              </tree>
+                           </field>
+                           <field name="total_efectivo" class="oe_subtotal_footer_separator"  />
+                        </group>
+                        <group>
+                           <field name="date" attrs="{'readonly': [('state', '!=', 'new')]}"/>
+                           <field name="cashier_id" attrs="{'readonly': [('state', '!=', 'new')]}"/>
+                           <field name="billete_ids"   attrs="{'readonly': [('state', '!=', 'new')]}">
+                              <tree editable="bottom">
+                                 <field name="coin_value" required="1"/>
+                                 <field name="number"/>
+                                 <field name="subtotal" sum="Total"/>
+                              </tree>
+                           </field>
+                           <field name="total_cobrado"  />
+                           <field name="amount_payment" invisible="1"/>
+                           <field name="amount_payment_diff" invisible="1"/>
+                           <field name="company_id" invisible="1"/>
+                           <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                         <field name="journal_payment_ids" nolabel="1" attrs="{'readonly': [('state', '!=', 'new')]}">
+                              <tree editable="bottom">
+                                 <field name="journal_id" required="1" domain="[('type','in',['cash','bank'])]"/>
+                                 <field name="currency_id" invisible="1"/>
+                                 <field name="amount_cobrado" sum="Total Cobrado" />
+                                 <field name="amount_payment"   invisible="1"/>
+                                 <field name="diferencia"   invisible="1"/>
+                              </tree>
+                           </field>
+                    </group>
+                   <group>
+                      <field name="note" nolabel="1" placeholder="Escriba aqui algunas observaciones ..."/>
+                   </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="account_close_box_list">
+      <field name="name">account_close_box list</field>
+      <field name="model">account.close.box</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="cashier_id"/>
+          <field name="date"/>
+           <field name="initial_amount"/>
+           <field name="total_efectivo"/>
+           <field name="total_cobrado"/>
+           <field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="action_account_close_box">
+      <field name="name">Caja</field>
+      <field name="res_model">account.close.box</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- Top menu item -->
+
+    <menuitem name="Cierre de Caja" id="account_close_box.menu_root" web_icon="account_close_box,static/description/icon.png" groups="account.group_account_manager"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Cajas" id="account_close_box.menu_close_box" action="action_account_close_box" parent="account_close_box.menu_root"/>
+<!--    <menuitem name="Menu 2" id="account_close_box.menu_2" parent="account_close_box.menu_root"/>-->
+
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="account_close_box.menu_1_list" parent="account_close_box.menu_1"
+              action="account_close_box.action_window"/>
+    <menuitem name="Server to list" id="account_close_box" parent="account_close_box.menu_2"
+              action="account_close_box.action_server"/>
+-->
+  </data>
+</odoo>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <record id="seq_account_close_box_auto" model="ir.sequence">
+        <field name="name">account.close.box</field>
+        <field name="code">account.close.box</field>
+        <field eval="6" name="padding" />
+        <field name="prefix">AR-</field>
+    </record>
+</odoo>

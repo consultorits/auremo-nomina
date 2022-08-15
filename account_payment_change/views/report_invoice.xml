@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="account_payment_change_report_invoice_document" inherit_id="account.report_invoice_document">
+        <xpath expr="//p[@name='incoterm']" position="after">
+            <p t-if="o.amount_change" name="amount_change">
+                <strong>Su cambio es: </strong><span t-field="o.amount_change"/>
+            </p>
+        </xpath>
+    </template>
+</odoo>

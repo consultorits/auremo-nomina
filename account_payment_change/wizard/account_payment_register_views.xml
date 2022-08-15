@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of SysNeo. See LICENSE file for full copyright and licensing details. -->
+
+<odoo>
+    
+    <record id="view_account_payment_register_form" model="ir.ui.view">
+        <field name="name">account.payment.register.form</field>
+        <field name="model">account.payment.register</field>
+        <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_bank_id" position="after">
+                <field name="journal_type" invisible="1"/>
+                <field name="amount_received" attrs="{'invisible': [('journal_type', '!=', 'cash')]}"/>
+                <field name="amount_change" attrs="{'invisible': [('journal_type', '!=', 'cash')]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
