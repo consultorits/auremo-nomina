@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- valorizacion-->
+<template id="report_whtax_document">
+    <t t-call="web.external_layout">
+        <t t-set="o" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+        <t t-set="address">
+            <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+            <div t-if="o.partner_id.vat" class="mt16">
+                <t t-if="o.company_id.country_id.vat_label" t-esc="o.company_id.country_id.vat_label" id="inv_tax_id_label"/>
+                <t t-else="">Tax ID</t>: <span t-field="o.partner_id.vat"/>
+            </div>
+        </t>
+        <div class="page">
+            <h2>WTAX <span t-if="o.name != '/'" t-field="o.name"/></h2>
+
+            <div id="informations" class="row mt32 mb32">
+                <div class="col-auto mw-100 mb-2" t-if="o.date" name="date">
+                    <strong>Fecha:</strong>
+                    <p class="m-0" t-field="o.date"/>
+                </div>
+                <!--<div class="col-auto mw-100 mb-2" t-if="o.account_date" name="account_date">
+                    <strong>Account Date:</strong>
+                    <p class="m-0" t-field="o.account_date"/>
+                </div>-->
+                <div class="col-auto mw-100 mb-2" t-if="o.ref" name="reference">
+                    <strong>Referencia:</strong>
+                    <p class="m-0" t-field="o.ref"/>
+                </div>
+            </div>
+
+            <table class="table table-sm o_main_table" name="whtax_line_table">
+                <thead>
+                    <tr>
+                        <th name="th_invoice" class="text-left"><span>Factura</span></th>
+                        <th name="th_base" class="text-right"><span>Monto base</span></th>
+                        <th name="th_wtax" class="text-center"><span>Retención</span></th>
+                        <th name="th_wtaxrate" class="text-right"><span>Ratio (%)</span></th>
+                        <th name="th_wtaxamount" class="text-right"><span>Monto</span></th>
+                    </tr>
+                </thead>
+                <tbody class="whtax_tbody">
+                    <t t-foreach="o.line_ids" t-as="line">
+                        <tr>
+                            <td><span t-field="line.invoice_id"/></td>
+                            <td class="text-right"><span class="text-nowrap" t-field="line.base_amount"/></td>
+                            <td class="text-center"><span t-field="line.wtax_id"/></td>
+                            <td class="text-right"><span class="text-nowrap" t-field="line.wtax_rate"/></td>
+                            <td class="text-right o_price_total">
+                                <span class="text-nowrap" t-field="line.wtax_amount"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+            <div class="clearfix">
+                <div id="total" class="row">
+                    <div t-attf-class="#{'col-5' if report_type != 'html' else 'col-sm-6 col-md-5'} ml-auto">
+                        <table class="table table-sm" style="page-break-inside: avoid;">
+                            <tr class="border-black o_total">
+                                <td><strong>Monto Total</strong></td>
+                                <td class="text-right">
+                                    <span class="text-nowrap" t-field="o.wtax_tamount"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div>
+                <p><b>Resumen</b></p>
+                <div>
+                    <table class="table table-sm" style="width:30%">
+                        <t t-foreach="json.loads(o.wtax_widget).get('content')" t-as="line">
+                            <tr>
+                                <td><span t-esc="line.get('whtax_name')"/></td>
+                                <td><span t-esc="line.get('amount')" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+            </div>
+            
+
+        </div>
+    </t>
+</template>
+
+<template id="report_whtax">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="account_withholding_tax.report_whtax_document" t-lang="doc.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of SysNeo. See LICENSE file for full copyright and licensing details. -->
+
+<odoo>
+    <record model="ir.ui.view" id="account_wtax_form_view">
+        <field name="name">account.wtax.form</field>
+        <field name="model">account.wtax</field>
+        <field name="arch" type="xml">
+            <form string="WTax">
+                <group>
+                    <group id="header_left_group">
+                        <field name="name" />
+                        <field name="account_id" />
+                    </group>
+                    <group id="header_right_group">
+                        <field name="code" />
+                        <field name="rate"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="account_wtax_search_view">
+        <field name="name">account.wtax.search</field>
+        <field name="model">account.wtax</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="account_id" />
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="account_wtax_tree_view">
+        <field name="name">account.wtax.tree</field>
+        <field name="model">account.wtax</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="rate"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="account_wtax_act_window">
+        <field name="name">WTax</field>
+        <field name="res_model">account.wtax</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="account_wtax_menu_config_type"
+            name="WTax"
+            parent="account.account_invoicing_menu"
+            action="account_wtax_act_window"
+            sequence="2"/>
+
+</odoo>

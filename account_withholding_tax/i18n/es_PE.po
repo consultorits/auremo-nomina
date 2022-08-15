@@ -1,0 +1,94 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* crm_category
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-22 04:49+0000\n"
+"PO-Revision-Date: 2020-01-22 04:49+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead__crm_category_id
+#: model:ir.model.fields,field_description:crm_category.field_sale_order__crm_category_id
+#: model_terms:ir.ui.view,arch_db:crm_category.crm_form_view_leads_oppor
+#: model_terms:ir.ui.view,arch_db:crm_category.crm_lead_category_form_view
+msgid "Category"
+msgstr "Tipo de servicio"
+
+#. module: crm_category
+#: model:ir.ui.menu,name:crm_category.crm_lead_category_menu_config_type
+msgid "Category Leads/Oppor"
+msgstr "Categoría Leads/Oppor"
+
+#. module: crm_category
+#: model:ir.actions.act_window,name:crm_category.crm_lead_category_act_window
+msgid "Category crm"
+msgstr "Categoría CRM"
+
+#. module: crm_category
+#: model:ir.model,name:crm_category.model_crm_lead_category
+msgid "Category crm lead/oportunity"
+msgstr "Categoría CRM lead/oportunity"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category__company_id
+msgid "Company"
+msgstr "Compañia"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category__display_name
+msgid "Display Name"
+msgstr "Nombre a Mostrar"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category__id
+msgid "ID"
+msgstr ""
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category____last_update
+msgid "Last Modified on"
+msgstr "Ultima Modificación en"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category__write_uid
+msgid "Last Updated by"
+msgstr "Actualizado última vez por"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category__write_date
+msgid "Last Updated on"
+msgstr "Ultima Actualización"
+
+#. module: crm_category
+#: model:ir.model,name:crm_category.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Iniciativa/Oportunidad"
+
+#. module: crm_category
+#: model:ir.model.fields,field_description:crm_category.field_crm_lead_category__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: crm_category
+#: model:ir.model,name:crm_category.model_sale_order
+msgid "Sales Order"
+msgstr "Pedidos de Venta"

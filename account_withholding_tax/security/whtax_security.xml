@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017-2018 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+<data noupdate="0">
+    <record id="group_cancel_wtax" model="res.groups">
+        <field name="name">Cancelar Retenciones</field>
+    </record>
+</data>
+
+<data noupdate="1">
+    <record id="account_account_withholding_rule" model="ir.rule">
+        <field name="name">Account Withholding multi-company</field>
+        <field name="model_id" ref="model_account_withholding"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="account_account_wtax_rule" model="ir.rule">
+        <field name="name">Account Wtax multi-company</field>
+        <field name="model_id" ref="model_account_wtax"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+</data>
+
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <report 
+        id="action_report_whtax"
+        string="Retención"
+        model="account.withholding"
+        report_type="qweb-pdf"
+        file="account_withholding_tax.report_whtax"
+        name="account_withholding_tax.report_whtax"
+        print_report_name="'WT-%s' % (object.name)"
+    />
+
+</odoo>

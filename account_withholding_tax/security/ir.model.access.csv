@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_withholding,account.withholding.access,account_withholding_tax.model_account_withholding,,1,1,1,1
+access_account_withholding_line,account.withholding.line.access,account_withholding_tax.model_account_withholding_line,,1,1,1,1
+access_account_wtax,account.wtax.access,account_withholding_tax.model_account_wtax,,1,1,1,1
