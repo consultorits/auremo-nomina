@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="inherited_view_sequence" model="ir.ui.view">
+        <field name="name">Secuencia CAI</field>
+        <field name="model">ir.sequence</field>
+            <field name="inherit_id" ref="base.sequence_view"/>
+                <field name="arch" type="xml">
+                    <data>
+                        <xpath expr="//field[@name='implementation']" position="after">
+                        <field name="l10n_hn_activo"/>
+                        <field name="l10n_hn_cai" attrs="{'invisible': [('l10n_hn_activo', '=', False)]}"/>
+                        <field name="l10n_hn_correlativo_fiscal_inicial" attrs="{'invisible': [('l10n_hn_activo', '=', False)]}"/>
+                        <field name="l10n_hn_correlativo_fiscal_final" attrs="{'invisible': [('l10n_hn_activo', '=', False)]}"/>
+                        </xpath>
+                        <xpath expr="//field[@name='active']" position="after">
+                        <field name="l10n_hn_fecha_inicial_emision" attrs="{'invisible': [('l10n_hn_activo', '=', False)]}"/>
+                        <field name="l10n_hn_fecha_final_emision" attrs="{'invisible': [('l10n_hn_activo', '=', False)]}"/>
+                        </xpath>
+                    </data>
+                </field>
+    </record>
+</odoo>
