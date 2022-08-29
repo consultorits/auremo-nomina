@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+        <report
+            id="vacation_request_print"
+            model="vacation.request"
+            string="Solicitud"
+            name="gsie_benefits_law.vacation_request_report"
+            file="gsie_benefits_law.vacation_request_report"
+            report_type="qweb-pdf" 
+            paperformat="gsie_benefits_law.vacation_request_format"/>
+        />
+
+        <report
+            id="extra_salary_report_print"
+            model="hr.payslip"
+            string="Voucher Tipo de Pago"
+            name="gsie_benefits_law.extra_salary_report"
+            file="gsie_benefits_law.extra_salary_report"
+            report_type="qweb-pdf" 
+            paperformat="gsie_benefits_law.extra_salary_format"/>
+        />
+    </data>
+</odoo>

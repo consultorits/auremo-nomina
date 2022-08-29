@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="vacations_tree_view" model="ir.ui.view">
+		<field name="name">vacations.tree.view</field>
+		<field name="model">benefits.vacations</field>                     
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+                <field name="start_date"/>
+				<field name="end_date"/>
+				<field name="state"/>
+				<field name="total" sum="Total"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="vacationes_search_view" model="ir.ui.view">        
+		<field name="name">vacations.search.view</field>
+		<field name="model">benefits.vacations</field>
+		<field name="arch" type="xml">
+			<search string="Beneficios por ley Search">
+				<field name="name"/>
+                <group expand="1" string="Agrupado por">
+                    <filter name="state" string="Estado" context="{'group_by':'state'}"/>
+        		</group>
+			</search>
+		</field>
+	</record>
+
+
+	<record id="vacations_form_view" model="ir.ui.view">
+		<field name="name">vacations.form.view</field>
+		<field name="model">benefits.vacations</field>
+		<field name="arch" type="xml">
+            <form string="Vacaciones">
+                <header>
+                    <button class="oe_highlight" type="object" name="getEmployees" string="Obtener empleados" states="draft" />
+                    <button name="validate_benefit" type="object" string="Validar" class="oe_highlight" states="draft"/>     
+                    <button name="sent_to_draft" type="object" string="Volver a borrador" class="oe_highlight" states="validated"/>                  
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <h1><field name="name" nolabel="1" placeholder="Descripcion" attrs="{'readonly':[('state', '!=', 'draft')]}"/></h1>
+                    <group col="4">
+                        <field name="start_date" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>			
+                        <field name="end_date" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>			
+                        <field name="structure_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" options="{'no_create':True}"/>			
+                        <field name="journal_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" options="{'no_create':True}"/>			
+                        <field name="salary_rule_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}" options="{'no_create':True}"/>			
+                        <field name="total"/>							
+                    </group>
+                    <notebook>
+                        <page string="Lineas">
+                            <field name="line_ids" attrs="{'readonly':[('state', '!=', 'draft')]}">
+                                <tree editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="vacation_days"/>
+                                    <field name="day_amount"/>
+                                    <field name="amount" sum="Total"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="vacations_action_view">
+		<field name="name">Vacaciones</field>
+		<field name="res_model">benefits.vacations</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+    <menuitem 
+        id="vacations_menuitem" 
+        name="Vacaciones" 
+        sequence="2"
+        action="vacations_action_view" 
+        parent="vacation_menu"
+    />
+		
+</odoo>

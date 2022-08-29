@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="vacation_request_report">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">   
+                    <table style="width:100%;">
+                        <tr>
+                            <td rowspan="3" style="width:100%;">
+                                <img t-if="user.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(user.company_id.logo)" style="max-height: 100px;" />
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="text-align:center;margin-top:2%"><h2><strong><u>SOLICITUD  DE VACACIONES.</u></strong></h2></div>
+                    
+                    <div style="font-size:25px;margin-top:3%">Yo <span t-field="o.employee_id"/> por medio de la presente hago la siguiente solicitud. Solicitando un dia de vacaciones del ______________________________________________________________________  _____________________________________________________________________________________________ 
+                    de  laborar para  cubrir  tramites personales</div>
+                    
+                    <div style="font-size:25px;margin-top:4%">San Pedro Sula, Cortes. <span t-esc="o.request_date.day"/> de <span t-esc="o.request_date.strftime('%B')"/> del año <span t-esc="o.request_date.year"/></div>
+                    
+                    <div style="font-size:25px;margin-top:8%">Firma Empleado ________________________________________________________</div>
+                
+                    <div style="text-align:center;margin-top:1%"><h4><strong>AUTORIZACION</strong></h4></div>
+
+                    <div style="font-size:25px;margin-top:1%">La empresa Mercantil Auremo S. de R. L por la presente autoriza al empleado <span t-field="o.employee_id"/>, autoriza <span t-field="o.total_days"/> dia(s) de vacaciones restando ____dias para gozarlas posteriormente,</div>
+                    
+                    <div style="font-size:25px;margin-top:4%">San Pedro Sula, Cortes. <span t-esc="datetime.datetime.now().day"/> de <span t-esc="datetime.datetime.now().strftime('%B')"/> del año <span t-esc="datetime.datetime.now().year"/></div>
+                
+                    <table style="margin-left:10%;width:80%;margin-top:10%">
+                        <tr>
+                            <td style="width:40%;border-bottom:1px solid black"><br></br></td>
+                            <td style="width:20%;"><br></br></td>
+                            <td style="width:40%;border-bottom:1px solid black"><br></br></td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%;font-size:25px;text-align:center">EMPRESA</td>
+                            <td style="width:20%;"><br></br></td>
+                            <td style="width:40%;font-size:25px;text-align:center">EMPLEADO</td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="hr_contract_benefits_view">
+            <field name="name">hr_contract_benefits_view</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Beneficios por Ley">
+                        <group col="4">
+                            <field name="fourteen_amount"/>
+                            <field name="thirteen_amount"/>
+                            <field name="vacations_amount"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</odoo>

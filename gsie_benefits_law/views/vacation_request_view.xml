@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="vacation_request_form_view" model="ir.ui.view">
+		<field name="name">vacation_request_form_view</field>
+		<field name="model">vacation.request</field>
+		<field name="arch" type="xml">
+			<form string="Solicitud de vacaciones">
+				<header>
+					<button 
+						name="getInfo" type="object" string="Obtener"  class="oe_highlight" states="draft"
+					/>     
+              
+					<button name="done" type="object" string="Validar" class="oe_highlight" states="draft"/>   
+					<button name="refused" type="object" string="Rechazar" class="oe_highlight" states="draft"/>        
+					<button name="draft" type="object" string="Volver a borrador"  class="oe_highlight" states="done"/>                  
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet>
+                    <h1><field name="name" nolabel="1" required="1" placeholder="Nombre" attrs="{'readonly':[('state', '!=', 'draft')]}"/></h1>
+					<group>
+						<group>
+							<field 
+								name="employee_id" required="1" options="{'no_create':True, 'no_open':True}" attrs="{'readonly':[('state', 'in', ('done', 'cancel'))]}"
+							/>
+
+							<field 
+								name="department_id"
+								readonly="1"
+								force_save="1"
+								options="{'no_create':True, 'no_open':True}"
+							/>
+
+
+							<field
+								name="job_id"
+								readonly="1"
+								force_save="1"
+								options="{'no_create':True, 'no_open':True}"
+							/>
+
+							<field
+								name="contract_date"
+								readonly="1"
+								force_save="1"
+							/>
+
+						</group>
+						<group>
+
+							<field
+								name="date_from"
+								required="1"
+								attrs="{'readonly':[('state', 'in', ('done', 'cancel'))]}"
+							/>
+
+							<field
+								name="date_to"
+								required="1"
+								attrs="{'readonly':[('state', 'in', ('done', 'cancel'))]}"
+							/>
+
+							<field
+								name="total_days"
+								readonly="1"
+								force_save="1"
+							/>
+
+							<field
+								name="request_date"
+								readonly="1"
+							/>
+
+							<field 
+								name="year"
+								invisible="1"
+							/>
+
+						</group>					
+					</group>
+					<notebook>
+						<page string="Días pendientes">
+							<field name="vacation_request_detail_ids" attrs="{'readonly':[('state', 'in', ('done', 'cancel'))]}">
+								<tree create="0" delete="0" editable="bottom">
+									<field  name="year" readonly="1"/>
+									<field name="vacation_days" sum="total" readonly="1"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_ids" widget="mail_thread"/>
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record id="vacation_request_tree_view" model="ir.ui.view">
+		<field name="name">vacation_request_tree_view</field>
+		<field name="model">vacation.request</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+    			<field name="department_id"/>
+    			<field name="job_id"/>
+    			<field name="request_date"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_vacation_request" model="ir.actions.act_window">
+		<field name="name">Solicitud de vacaciones</field>
+		<field name="res_model">vacation.request</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+    <menuitem 
+        id="vacation_menu" 
+        name="Vacaciones" 
+        sequence="3"
+        parent="benefits_menu_root"
+    />
+
+    <menuitem 
+        id="vacation_request_menuitem" 
+        name="Solicitud de Vacaciones" 
+        sequence="1"
+        action="action_vacation_request" 
+        parent="vacation_menu"
+    />
+		
+</odoo>

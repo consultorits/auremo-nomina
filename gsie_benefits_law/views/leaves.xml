@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="leaves_sie_tree_view" model="ir.ui.view">
+		<field name="name">leaves_sie_tree_view</field>
+		<field name="model">type.leaves.sie</field>
+		<field name="arch" type="xml">
+			<tree editable="bottom">
+				<field name="name"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="action_leaves_sie" model="ir.actions.act_window">
+		<field name="name">Tipos de ausencias</field>
+		<field name="res_model">type.leaves.sie</field>
+		<field name="view_mode">tree</field>
+	</record>
+		
+	<menuitem 
+        id="configuration_menu" 
+        name="Configuraciones" 
+        sequence="4"
+        parent="benefits_menu_root"
+    />
+
+    <menuitem 
+        id="leaves_types_menuitem" 
+        name="Tipos de Ausencias" 
+        sequence="1"
+        action="action_leaves_sie" 
+        parent="configuration_menu"
+    />
+</odoo>

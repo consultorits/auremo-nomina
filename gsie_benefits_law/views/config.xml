@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="gsie_leaves_config_tree_view" model="ir.ui.view">
+		<field name="name">gsie_leaves_config_tree_view</field>
+		<field name="model">gsie.leaves.config</field>
+		<field name="arch" type="xml">
+			<tree editable="bottom"> 
+				<field name="leaves_sie_id" options="{'no_create': True}" required="1"/>
+				<field name="seleccionado"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="gsie_leaves_config_menu_action" model="ir.actions.act_window">
+		<field name="name">Ajustes</field>
+		<field name="res_model">gsie.leaves.config</field>
+		<field name="view_mode">tree</field>
+	</record>
+
+	<menuitem 
+        id="conf_menuitem" 
+        name="Ajustes" 
+        sequence="2"
+        action="gsie_leaves_config_menu_action" 
+        parent="configuration_menu"
+    />
+</odoo>

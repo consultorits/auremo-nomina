@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="extra_salary_report">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <table style="width:100%;">
+                        <tr>
+                            <td rowspan="3" style="width:40%;">
+                                <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="max-height: 150px;" />
+                            </td>
+                            <td class="text-center" style="width:60%;">
+                                <h3><strong><span t-field="o.company_id.name"/></strong></h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td t-if="o.payslip_run_id.salary_type == 'fourteen'" class="text-center" style="width:60%;">
+                                <h4><strong>VOUCHER CATORCEAVO</strong></h4>
+                            </td>
+                            <td t-if="o.payslip_run_id.salary_type == 'thirteen'" class="text-center" style="width:60%;">
+                                <h4><strong>VOUCHER AGUINALDO</strong></h4>
+                            </td>
+                            <td t-if="o.payslip_run_id.salary_type == 'vacations'" class="text-center" style="width:60%;">
+                                <h4><strong>VOUCHER VACACIONES</strong></h4>
+                            </td>
+                        </tr>
+                        
+                    </table>
+                    <br/>
+                    <table style="width:100%;">
+                        <tr>
+
+                        <td class="text-left" style="width:60%;">  
+                                
+                            <strong>Empleado: </strong><span t-field="o.employee_id.name"/>                 
+                        </td>
+
+                        <td class="text-left" style="width:20%;">
+                            <strong>ID: </strong><span t-field="o.employee_id.identification_id"/> 
+                        </td>
+
+                        <td class="text-left" style="width:20%;">
+                            <strong>Codigo: </strong><span t-field="o.employee_id.code_employee"/> 
+                        </td>
+
+                        </tr>
+                        
+                        <tr>
+                        
+                        <td class="text-left" style="width:60%;">
+                            <strong>Departamento: </strong><span t-field="o.employee_id.department_id.name"/>
+                        </td>
+                        <td class="text-left" style="width:20%;">            
+                            <strong>Desde: </strong><span t-field="o.date_from"/>                 
+                        </td>
+
+                        </tr>
+                        <tr>
+                        <td class="text-left" style="width:60%;">
+                            <strong>Puesto: </strong><span t-field="o.employee_id.job_id.name"/>
+                        </td>
+                        <td class="text-left" style="width:20%;">            
+                            <strong>Hasta: </strong><span t-field="o.date_to"/>                 
+                        </td>
+                        
+                        </tr>  
+                    </table>
+            
+                    <!--variables para sumatoria total de los diferentes ingresos-->
+                    <t t-set="salario_ordinario" t-value="0"/>
+                    <t t-set="proporcion" t-value="0"/>
+                    <t t-set="septimo" t-value="0"/>
+                    <t t-set="incaEferCom" t-value="0"/>
+                    <t t-set="incaEferComCon" t-value="0"/>
+                    <t t-set="totalIngresos" t-value="0"/>
+                    <t t-set="ihss" t-value="0"/>
+                    <t t-set="optica" t-value="0"/>
+                    <t t-set="aporte_cooperativa" t-value="0"/>
+                    <t t-set="prestamo" t-value="0"/>
+                    <t t-set="odontologia" t-value="0"/>
+                    <t t-set="servicios_alimenticios" t-value="0"/>
+                    <t t-set="aporte_sagrada_familia" t-value="0"/>
+                    <t t-set="prestamo_lafise" t-value="0"/>
+                    <t t-set="totalDeducciones" t-value="0"/>
+                    <!--variables para sumatoria total de los diferentes ingresos-->
+
+                    <t t-foreach="o.line_ids" t-as="l2">
+                        <t t-if="l2.category_id.type_category == 'is_ordinary'">
+                        <t 
+                            t-set="salario_ordinario"
+                            t-value="salario_ordinario + l2.amount"
+                        />
+
+                        <t 
+                            t-set="totalIngresos"
+                            t-value="totalIngresos + l2.amount"
+                        />
+                        </t>
+                    </t>
+
+                    <br/>
+                    <hr/>
+                    <table style="width:100%;">
+                        <tr>
+                            <td class="text-center" style="width:50%;">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td 
+                                        class="text-center"
+                                        colspan="2"
+                                        >
+                                        <strong>INGRESOS</strong>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td
+                                        class="text-left"
+                                        style="border:5px;"
+                                        >
+                                        <br/>
+                                        Salario quincenal:
+                                        </td>
+
+                                        <td 
+                                        class="text-right"
+                                        style="border:5px;padding-right:35px;"
+                                        >
+                                        <br/>
+                                        <t t-esc="'{:20,.2f}'.format(salario_ordinario)"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr t-foreach="o.line_ids" t-as="l">
+                                        <td
+                                        class="text-left"
+                                        style="border:5px;"
+                                        t-if="l.category_id.type_category == 'is_profit' and l.amount > 0"
+                                        >
+                                        <br/>
+                                        <span t-field="l.name"/>
+                                        </td>
+
+                                        <td 
+                                        class="text-right"
+                                        style="border:5px;padding-right:35px;"
+                                        t-if="l.category_id.type_category == 'is_profit' and l.amount > 0"
+                                        >
+                                        <br/>
+                                        <t t-esc="'{:20,.2f}'.format(l.amount)"/>
+                                        <t 
+                                            t-set="totalIngresos"
+                                            t-value="totalIngresos + l.amount"
+                                        />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br/>
+                    <hr/>
+                    <br/>
+
+                    <table style="width:100%;">
+                        <tr>
+                        <td class="text-center" style="width:50%;">
+                            <table style="width:100%;">
+                                <tr>
+                                    <td class="text-left">
+                                    Total ingresos:
+                                    </td>
+
+                                    <td 
+                                    class="text-right"
+                                    style="padding-right:35px;">
+                                    <strong><t t-esc="'{:20,.2f}'.format(totalIngresos)"/></strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        </tr>
+                    </table>
+
+                    <br/>
+                    <br/>
+                    <table style="width:100%;">
+                        <tr>
+                        <td 
+                            class="text-center" 
+                            style="width:100%;"
+                        >
+                            
+                            <strong>Salario neto: <t t-esc="'{:20,.2f}'.format(totalIngresos - totalDeducciones)"/></strong>
+                    
+                        </td>
+                        </tr>
+                    </table>
+
+                    <br/>
+                    <hr/>
+                    <br/>
+                    <br/>
+            
+                    <table style="width:100%;">
+                        <tr>
+                        <td
+                            class="text-center" 
+                            style="width:50%;"
+                        >
+                            <strong>__________________________________________</strong> 
+                        </td>          
+                        </tr>
+
+                        <tr>
+                        <td 
+                            class="text-center" 
+                            style="width:100%;"
+                        >
+                            <strong>Firma del empleado</strong> 
+                        </td>          
+                        </tr>
+                    </table> 
+                </div>
+                <p style="page-break-before:always;"></p>
+            </t>
+        </t>
+    </template>
+</odoo>

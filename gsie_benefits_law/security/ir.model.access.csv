@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_benefits_extra_salaries,access_benefits_extra_salaries,model_benefits_extra_salaries,base.group_user,1,1,1,1
+access_extra_salaries_line,access_extra_salaries_line,model_extra_salaries_line,base.group_user,1,1,1,1
+access_vacation_request,access_vacation_request,model_vacation_request,base.group_user,1,1,1,1
+access_type_leaves_sie,access_type_leaves_sie,model_type_leaves_sie,base.group_user,1,1,1,1
+access_gsie_leaves_config,access_gsie_leaves_config,model_gsie_leaves_config,base.group_user,1,1,1,1
+access_vacation_request_detail,access_vacation_request_detail,model_vacation_request_detail,base.group_user,1,1,1,1
+access_benefits_vacations,access_benefits_vacations,model_benefits_vacations,base.group_user,1,1,1,1
+access_vacations_lines,access_vacations_lines,model_vacations_lines,base.group_user,1,1,1,1
