@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="gestion_vehiculos.form">
+            <field name="name">gestion_vehiculos.detalle_sale_vehiculo form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[3]" position="after">
+                    <page string="Vehiculos">
+                        <tree>
+                            <field name="vehiculos"/>
+                        </tree>
+                    </page>
+                </xpath>
+            </field>    
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,156 @@
+<odoo>
+  <data>
+  <!-- record para mostrar el formularioy la vista de vehiculos-->
+    <record model="ir.ui.view" id="gestion_vehiculos_list">
+      <field name="name">gestion_vehiculos list</field>
+      <field name="model">gestion_vehiculos.gestion_vehiculos</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="marca"/>
+          <field name="modelo"/>
+          <field name="dateto"/>
+          <field name="color"/>
+          <field name="placa"/>
+          <field name="vin"/>
+        </tree>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="gestion_vehiculos_form">
+      <field name="name">gestion_vehiculos form</field>
+      <field name="model">gestion_vehiculos.gestion_vehiculos</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="marca"/>
+            <field name="modelo" domain="[('marcas_id','=',marca)]"/>
+            <field name="dateto"/>
+            <field name="color"/>
+            <field name="placa"/>
+            <field name="vin"/>
+          </group>
+        </form>
+      </field>
+    </record>
+
+  <!-- record para mostrar el formulario y la vista de marcas-->
+    <record model="ir.ui.view" id="gestion_marcas_list">
+      <field name="name">gestion_marcas list</field>
+      <field name="model">gestion_vehiculos.gestion_marcas</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="marcas"/>
+        </tree>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="gestion_marcas_form">
+      <field name="name">gestion_marcas form</field>
+      <field name="model">gestion_vehiculos.gestion_marcas</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="marcas"/>
+            <field name="modelos_ids">
+              <tree editable="bottom">
+                <field name="modelos"/>
+              </tree>
+            </field>
+          </group>
+        </form>
+      </field>
+    </record>
+<!-- record para mostrar el formulario y la vista de modelos-->
+    <record model="ir.ui.view" id="gestion_modelo_list">
+      <field name="name">gestion_modelo list</field>
+      <field name="model">gestion_vehiculos.gestion_modelo</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="modelos"/>
+          <field name="marcas_id"/>
+        </tree>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="gestion_modelo_form">
+      <field name="name">gestion_modelo form</field>
+      <field name="model">gestion_vehiculos.gestion_modelo</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="modelos"/>
+            <field name="marcas_id"/>
+          </group>
+        </form>
+      </field>
+    </record>
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="gestion_vehiculos.action_window">
+      <field name="name">Gestion de Vehiculos</field>
+      <field name="res_model">gestion_vehiculos.gestion_vehiculos</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="gestion_marcas_action_window">
+      <field name="name">Gestion de Marcas</field>
+      <field name="res_model">gestion_vehiculos.gestion_marcas</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="gestion_modelo_action_window">
+      <field name="name">Gestion de Modelos</field>
+      <field name="res_model">gestion_vehiculos.gestion_modelo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <!-- server action to the one above -->
+
+    <record model="ir.actions.server" id="gestion_vehiculos_action_server">
+      <field name="name">gestion_vehiculos server</field>
+      <field name="model_id" ref="model_gestion_vehiculos_gestion_vehiculos"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+    <record model="ir.actions.server" id="gestion_marcas_action_server">
+      <field name="name">gestion_marcas server</field>
+      <field name="model_id" ref="model_gestion_vehiculos_gestion_marcas"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+    <record model="ir.actions.server" id="gestion_modelo_action_server">
+      <field name="name">gestion_modelo server</field>
+      <field name="model_id" ref="model_gestion_vehiculos_gestion_modelo"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+    <!-- Top menu item -->
+
+    <menuitem name="Gestion Vehiculos" id="gestion_vehiculos.menu_root"/>
+
+    <!-- menu categories -->
+    <menuitem name="Gestion Vehiculos" id="gestion_vehiculos.gestion_vehiculo" parent="gestion_vehiculos.menu_root"/>
+    <menuitem name="Marcas" id="gestion_vehiculos.gestion_marcas" parent="gestion_vehiculos.menu_root"/>
+     <menuitem name="Modelos" id="gestion_vehiculos.gestion_modelo" parent="gestion_vehiculos.menu_root"/>
+    <!-- actions -->
+
+    <menuitem name="Vehiculos" id="gestion_vehiculos.gestion_vehiculo_list" parent="gestion_vehiculos.gestion_vehiculo"
+    action="gestion_vehiculos.action_window"/>
+    <menuitem name="Marcas" id="gestion_vehiculos.gestion_marcas_list" parent="gestion_vehiculos.menu_root"
+    action="gestion_marcas_action_window"/>
+    <menuitem name="Modelos" id="gestion_vehiculos.gestion_modelo_list" parent="gestion_vehiculos.menu_root"
+    action="gestion_modelo_action_window"/>
+  </data>
+</odoo>
