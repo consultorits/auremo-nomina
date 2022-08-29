@@ -1,0 +1,65 @@
+from odoo import fields, api, models, tools, _
+
+class accountReportSar(models.Model):
+    _name = 'account.report.sar'
+    _description = 'Reporte de libros contables SAR'
+    _auto = False
+
+    fecha = fields.Date(readonly=True)
+    empresa = fields.Char(readonly=True)
+    rtn = fields.Char(readonly=True)
+    state = fields.Selection([('draft', 'Unposted'), ('posted', 'Posted'), ('cancel', 'Cancelled')], 'Status', readonly=True)
+    factura = fields.Char(readonly=True)
+    documento = fields.Many2one('account.move', 'Documento', readonly=True, auto_join=True)
+    gravado = fields.Monetary(readonly=True, string='Importe Gravado', currency_field='company_currency_id')
+    exento = fields.Monetary(readonly=True, string='Importe Exento', currency_field='company_currency_id')
+    exonerado = fields.Monetary(readonly=True, string='Importe Exonerado', currency_field='company_currency_id')
+    impuesto = fields.Monetary(readonly=True, string='Impuesto', currency_field='company_currency_id')
+    total = fields.Monetary(readonly=True, string='Total', currency_field='company_currency_id')
+
+    type = fields.Char(readonly=True)
+    journal_id = fields.Many2one('account.journal', 'Journal', readonly=True, auto_join=True)
+    #partner_id = fields.Many2one('res.partner', 'Partner', readonly=True, auto_join=True)
+    company_id = fields.Many2one('res.company', 'Company', readonly=True, auto_join=True)
+    company_currency_id = fields.Many2one(related='company_id.currency_id', readonly=True)
+    move_id = fields.Many2one('account.move', string='Entry', auto_join=True)
+
+    def init(self):
+        cr = self._cr
+        tools.drop_view_if_exists(cr, self._table)
+        query = """
+        SELECT
+        am.id,
+        aml.move_id,
+        am.id AS documento,
+        am.type AS type,
+        am.date AS fecha,
+        rp.name AS empresa,
+        rp.vat AS rtn,
+        CASE WHEN am.journal_id != 2 and am.type = 'in_invoice' THEN am.ref ELSE replace(replace(replace(am.name,'FV',''),'NC',''),'ND','') END AS factura,
+        am.state,
+        am.journal_id,
+        am.company_id,
+        rc.currency_id,
+        -- isv compra:1 ,venta:2 -- exe compra:4 ,venta:3 -- exo compra:6, venta:5
+        --sum(CASE WHEN am.state != 'cancel' and aml.tax_line_id in (4,3) THEN aml.tax_base_amount ELSE Null END) as gravado,
+        sum(CASE WHEN am.state != 'cancel' and (aml.price_subtotal != aml.price_total) THEN aml.balance ELSE Null END) as gravado,
+        sum(CASE WHEN am.state != 'cancel' and  amlatr.account_tax_id in (3,4) THEN aml.balance ELSE Null END) as exento,
+        sum(CASE WHEN am.state != 'cancel' and amlatr.account_tax_id in (5,6) THEN aml.balance ELSE Null END) as exonerado,
+        sum(CASE WHEN am.state != 'cancel' and aml.tax_line_id in (1,2) THEN aml.balance ELSE Null END) as impuesto,
+        sum(CASE WHEN am.state != 'cancel' and aml.exclude_from_invoice_tab = true and tax_repartition_line_id is null THEN aml.balance ELSE Null END) as total
+        FROM account_move_line AS aml
+        
+        LEFT JOIN account_move AS am ON aml.move_id = am.id
+        LEFT JOIN res_partner AS rp ON am.partner_id = rp.id
+        LEFT JOIN res_company AS rc ON am.company_id = rc.id
+        LEFT JOIN account_journal AS aj ON am.journal_id = aj.id
+        LEFT JOIN account_move_line_account_tax_rel amlatr ON aml.id = amlatr.account_move_line_id
+        
+        WHERE aj.name in ('SAR Ventas','Boleta de Compra','Compras Fiscal')
+        AND am.state in ('posted','cancel')
+        GROUP BY am.date, am.id, rp.name, rp.vat, rc.currency_id, aml.move_id
+        ORDER BY am.type
+        """
+        sql = """CREATE or REPLACE VIEW %s as (%s)""" % (self._table, query)
+        cr.execute(sql)

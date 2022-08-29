@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of SysNeo. See LICENSE file for full copyright and licensing details. -->
+
+<odoo>
+    
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="employee_id" optional="show" 
+                    domain="[('apply_commission','=',True),'|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

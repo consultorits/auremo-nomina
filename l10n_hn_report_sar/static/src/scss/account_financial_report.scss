@@ -1,0 +1,21 @@
+
+.o_account_reports_page {
+  .o_account_reports_table {
+    .texto {
+      text-align: left;
+      width: 6%;
+    }
+  }
+  .o_account_reports_header_hierarchy {
+            th {
+                border-bottom: none;
+            }
+            th:not(:first-child) {
+                border: 1px solid #e6e6e6;
+                text-align: left !important;
+                border-collapse: separate;
+                padding-right: 2px;
+                padding-left: 2px;
+            }
+        }
+}

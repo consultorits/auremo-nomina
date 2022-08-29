@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="view_pivot_sar_line" model="ir.ui.view">
+  <field name="model">account.report.sar</field>
+  <field name="arch" type="xml">
+    <pivot>
+      <field name="gravado" type="measure" />
+      <field name="exento" type="measure" />
+      <field name="exonerado" type="measure" />
+      <field name="impuesto15" type="measure" />
+        <field name="impuesto18" type="measure" />
+      <field name="total" type="measure" />
+    </pivot>
+  </field>
+</record>
+
+<record id="action_account_hn_sar_line" model="ir.actions.act_window">
+        <field name="name">Prueba de libros</field>
+        <field name="res_model">account.report.sar</field>
+        <field name="view_mode">pivot,tree</field>
+        <field name="context">{'search_default_posted': 1, 'time_ranges': {'field': 'date', 'range': 'last_month'}}</field>
+    </record>
+    <menuitem id="menu_report_sar" name="prueba de libros" parent="account.menu_finance_configuration" sequence="25" action="action_account_hn_sar_line"/>
+
+</odoo>
