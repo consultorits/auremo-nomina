@@ -1,0 +1,3 @@
+01/12/20:
+.- se avanzó con los modelos.
+.- Implementar las vistas

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Part of SysNeo. See LICENSE file for full copyright and licensing details. -->
+
+<odoo>
+    <record model="ir.ui.view" id="stock_remission_form_view">
+        <field name="name">stock.remission</field>
+        <field name="model">stock.remission</field>
+        <field name="arch" type="xml">
+            <form string="Remisión">
+                <header>
+                    <button name="action_post" string="Publicar" class="oe_highlight"
+                            type="object" groups="stock.group_stock_user"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_cancel" string="Cancelar" class="oe_highlight"
+                            type="object" groups="stock.group_stock_manager"
+                            attrs="{'invisible': [('state', '!=', 'posted')]}"/>
+                    <button name="action_draft" string="Convertir a borrador" class="oe_highlight"
+                            type="object" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
+                    <button name="action_load_lines" string="Copiar Líneas" class="oe_highlight"
+                            type="object" groups="stock.group_stock_user"
+                            attrs="{'invisible': [('state', '=', 'posted')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group id="header_left_group">
+                            <field name="partner_id" widget="res_partner_many2one"/>
+                            <field name="serie_id"/>
+                            <field name="ref"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group id="header_right_group">
+                            <field name="date"/>
+                            <field name="doc_origin_type"/>
+                            <field name="picking_type_id" domain="[('code','=',doc_origin_type)]" attrs="{'invisible': [('doc_origin_type', '=', 'out_invoice')], 'required': [('doc_origin_type', '!=', 'out_invoice')]}"/>
+                            <field name="origin_picking_ids" domain="[('picking_type_id','=',picking_type_id),('state','=','done')]" attrs="{'invisible': [('doc_origin_type', '=', 'out_invoice')], 'required': [('doc_origin_type', '!=', 'out_invoice')]}" widget="many2many_tags"/>
+                            <field name="origin_invoice_ids" domain="[('move_type','=',doc_origin_type),('partner_id','=',partner_id),('state','=','posted')]" attrs="{'invisible': [('doc_origin_type', '!=', 'out_invoice')], 'required': [('doc_origin_type', '=', 'out_invoice')]}" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page id="lineas_remision" string="Productos">
+                            <field name="line_ids" context="{'default_doc_origin_type': doc_origin_type}">
+                                <tree editable="bottom">
+                                    <!--<field name="invoice_id" domain="[('type', '=', 'in_invoice'),('invoice_payment_state', '!=', 'paid'),('state', '=', 'posted'),('currency_id', '=', parent.currency_id),('partner_id', '=', parent.partner_id)]"/>
+                                    <field name="partner_id" invisible="1"/>-->
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="doc_origin_type" invisible="1"/>
+                                    <field name="stock_moveline_id" domain="[('picking_id','in',parent.origin_picking_ids)]" options="{'no_open': True, 'no_create': True}"
+                                    attrs="{'invisible': [('parent.doc_origin_type', '=', 'out_invoice')], 'required': [('doc_origin_type', '!=', 'out_invoice')]}"/>
+                                    <field name="account_move_id" domain="[('move_id','in',parent.origin_invoice_ids),('exclude_from_invoice_tab', '=', False)]" options="{'no_open': True, 'no_create': True}"
+                                    attrs="{'invisible': [('doc_origin_type', 'in', ['outgoing','internal'])], 'required': [('doc_origin_type', '=', 'out_invoice')]}"/>
+                                    <field name="product_id"/>
+                                    <field name="lote_serie"/>
+                                    <field name="qty"/>
+                                    <field name="product_uom_id"/>
+                                </tree>
+                            </field>
+                            <field name="narration" placeholder="Add an internal note..." nolabel="1" height="50"/>
+                        </page>
+                        <page id="otra_info" string="Otra información">
+                            <field name="user_id"/>
+                        </page>
+                        <page name="fiscal_hn" string="Fiscal">
+                            <group>
+                                <group name="fiscal_hn_l">
+                                    <field name="l10n_hn_cai"/>
+                                    <field name="l10n_hn_correlativo_fiscal_inicial" />
+                                    <field name="l10n_hn_correlativo_fiscal_final" />
+                                    <field name="l10n_hn_fecha_inicial_emision" />
+                                    <field name="l10n_hn_fecha_final_emision" />
+                                </group>
+                                <group name="fiscal_hn_r"></group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="stock_remission_search_view">
+        <field name="name">stock.remission.search</field>
+        <field name="model">stock.remission</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id" operator="child_of"/>
+                <field name="line_ids" string="Producto" filter_domain="[('line_ids.product_id', 'ilike', self)]"/>
+                <separator/>
+                <filter name="draft" string="Borrador" domain="[('state','=','draft')]"/>
+                <filter name="posted" string="Publicado" domain="[('state', '=', 'posted')]"/>
+                <filter name="cancel" string="Cancelado" domain="[('state', '=', 'cancel')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="partner" string="Partner" context="{'group_by':'partner_id'}"/>
+                    <separator/>
+                    <filter string="Fecha" name="date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="stock_remission_tree_view">
+        <field name="name">stock.remission.tree</field>
+        <field name="model">stock.remission</field>
+        <field name="arch" type="xml">
+            <tree string="Remisiones">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="doc_origin_type"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="stock_remission_act_window">
+        <field name="name">Remisiones</field>
+        <field name="res_model">stock.remission</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- serie de las guias -->
+    <record model="ir.ui.view" id="remission_serie_tree_view">
+        <field name="name">remission.serie.tree</field>
+        <field name="model">remission.serie</field>
+        <field name="arch" type="xml">
+            <tree string="Series" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="sequence_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="remission_serie_act_window">
+        <field name="name">Series Remisión</field>
+        <field name="res_model">remission.serie</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="stock_remission_menu_config_type"
+            name="Remisión"
+            parent="stock.menu_stock_warehouse_mgmt"
+            action="stock_remission_act_window"
+            sequence="25"/>
+
+    <menuitem id="remission_serie_menu_config_type"
+            name="Series Remisión"
+            parent="stock.menu_warehouse_config"
+            action="remission_serie_act_window"/>
+
+</odoo>

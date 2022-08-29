@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- valorizacion-->
+<template id="report_remission_document">
+    <t t-call="web.external_layout">
+        <t t-set="o" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+        <t t-set="address">
+            <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+            <div t-if="o.partner_id.vat" class="mt16">
+                <t t-if="o.company_id.country_id.vat_label" t-esc="o.company_id.country_id.vat_label" id="inv_tax_id_label"/>
+                <t t-else="">Tax ID</t>: <span t-field="o.partner_id.vat"/>
+            </div>
+        </t>
+        <div class="page">
+            <h2>REMISIÓN <span t-if="o.name != '/'" t-field="o.name"/></h2>
+
+            <div id="informations" class="row mt32 mb32">
+                <div class="col-auto mw-100 mb-2" t-if="o.date" name="date">
+                    <strong>Fecha:</strong>
+                    <p class="m-0" t-field="o.date"/>
+                </div>
+                <!--<div class="col-auto mw-100 mb-2" t-if="o.account_date" name="account_date">
+                    <strong>Account Date:</strong>
+                    <p class="m-0" t-field="o.account_date"/>
+                </div>-->
+                <div class="col-auto mw-100 mb-2" t-if="o.ref" name="reference">
+                    <strong>Referencia:</strong>
+                    <p class="m-0" t-field="o.ref"/>
+                </div>
+            </div>
+
+            <table class="table table-sm o_main_table" name="whtax_line_table">
+                <thead>
+                    <tr>
+                        <th name="th_producto" class="text-left"><span>Producto</span></th>
+                        <th name="th_cantidad" class="text-right"><span>Cantidad</span></th>
+                    </tr>
+                </thead>
+                <tbody class="whtax_tbody">
+                    <t t-foreach="o.line_ids" t-as="line">
+                        <tr>
+                            <td><span t-field="line.product_id"/></td>
+                            <td class="text-right"><span t-field="line.qty"/> <span t-field="line.product_uom_id"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            
+        </div>
+    </t>
+</template>
+
+<template id="report_remission">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="stock_remission.report_remission_document" t-lang="doc.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+</odoo>

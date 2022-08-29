@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2017-2018 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+<data noupdate="1">
+    <record id="stock_remission_rule" model="ir.rule">
+        <field name="name">stock remission multi-company</field>
+        <field name="model_id" ref="model_stock_remission"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="remission_serie_rule" model="ir.rule">
+        <field name="name">remission_serie multi-company</field>
+        <field name="model_id" ref="model_remission_serie"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+</data>
+</odoo>

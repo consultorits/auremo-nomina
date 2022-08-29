@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <report 
+        id="action_report_remission"
+        string="Remisión"
+        model="stock.remission"
+        report_type="qweb-pdf"
+        file="stock_remission.report_remission"
+        name="stock_remission.report_remission"
+        print_report_name="'Remision-%s' % (object.name)"
+    />
+
+</odoo>

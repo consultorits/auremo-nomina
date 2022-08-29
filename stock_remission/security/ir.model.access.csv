@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_remission,stock_remission_access,stock_remission.model_stock_remission,,1,1,1,1
+access_remission_line,stock_remission_line_access,stock_remission.model_stock_remission_line,,1,1,1,1
+access_remission_serie,stock_remission_serie_access,stock_remission.model_remission_serie,,1,1,1,1
